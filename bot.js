@@ -6,14 +6,23 @@ var config=require('./config');
 
 var T = new Twit(config);
 
-setInterval(tweetIt, 1000*20);
-tweetIt();
+var stream=T.stream('user');
 
-function tweetIt()
+stream.on('follow', followed);
+
+
+function followed(event)
 {
-    var r =Math.floor(Math.random()*100);
+    console.log('Someone followed you!');
+    var name=event.source.name;
+    var screenName=event.source.screen_name;
+    tweetIt('.@' + screenName + 'do you like a rainbow')''
+}
+function tweetIt(txt)
+{
+    
     var tweet={
-        status: 'here is a random number '+ r +' #codingrainbow from node.js'
+        status: txt
     }
     T.post('statuses/update', tweet, tweeted); 
 
